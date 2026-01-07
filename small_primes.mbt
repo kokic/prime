@@ -1,8 +1,11 @@
 ///|
 pub const LARGEST_SMALL_PRIME : Int = 9973
+
+///|
 pub const SMALL_PRIMES_LENGTH : Int = 1229
 
-///| All prime numbers up to 10000
+///|
+/// All prime numbers up to 10000
 pub let small_primes : Array[Int] = [
   2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73,
   79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 139, 149, 151, 157, 163,
