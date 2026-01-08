@@ -1,6 +1,9 @@
 ///|
 test "Is small prime" {
-  assert_true(is_small_prime(2003))
+  assert_true(is_small_prime(2))
+  assert_true(is_small_prime(3))
+  assert_true(is_small_prime(5))
+  assert_true(is_small_prime(7))
   assert_true(is_small_prime(2011))
   assert_true(is_small_prime(2017))
   assert_true(is_small_prime(2027))
