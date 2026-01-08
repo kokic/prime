@@ -1,4 +1,14 @@
 ///|
+pub fn is_even(n : BigInt) -> Bool {
+  (n % 2).is_zero() // `n & 1` panic for n is large even (≥ 2^32)
+}
+
+///|
+pub fn is_odd(n : BigInt) -> Bool {
+  n % 2 == 1
+}
+
+///|
 pub fn euclid_mod(a : BigInt, n : BigInt) -> BigInt {
   let r = a.mod(n)
   guard r < 0 else { r }

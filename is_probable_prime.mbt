@@ -3,7 +3,7 @@
 pub fn decompose_ds(n : BigInt) -> (BigInt, Int) {
   let mut d = n
   let mut s = 0
-  while d % 2 == 0 {
+  while is_even(d) {
     d = d / 2
     s = s + 1
   }
@@ -59,7 +59,7 @@ pub fn miller_rabin_witness(a : BigInt, n : BigInt) -> Bool {
 pub fn miller_rabin(n : BigInt, bases : Array[Int]) -> Bool {
   guard n >= 2 else { false }
   guard !(n == 2 || n == 3) else { true }
-  guard !(n % 2 == 0) else { false }
+  guard is_odd(n) else { false }
   for base in bases {
     if miller_rabin_witness(BigInt::from_int(base), n) {
       return false
@@ -82,10 +82,7 @@ test "Miller Rabin" {
 ///|
 /// Also see: https://en.wikipedia.org/wiki/Jacobi_symbol#Primality_testing
 pub fn jacobi(a_base : BigInt, n_base : BigInt) -> Int raise {
-  assert_true(
-    n_base > 0 && n_base % 2 == 1,
-    msg="n > 0 && n % 2 == 1: \{n_base}",
-  )
+  assert_true(n_base > 0 && is_odd(n_base), msg="n > 0 && n is odd: \{n_base}")
   let mut a = euclid_mod(a_base, n_base)
   let mut n = n_base
   let mut t = 1
@@ -126,7 +123,7 @@ test "Jacobi symbol" {
 
 ///|
 pub fn half_mod(x : BigInt, n : BigInt) -> BigInt {
-  guard (x % 2).is_zero() else { ((x + n) / 2).mod(n) }
+  guard is_even(x) else { ((x + n) / 2).mod(n) }
   (x / 2).mod(n)
 }
 
