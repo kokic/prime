@@ -203,7 +203,7 @@ pub fn strong_lucas_selfridge(n : BigInt) -> Bool raise {
 /// Also see: @math.is_probable_prime
 pub fn is_probable_prime_bpsw(n : BigInt) -> Bool {
   guard miller_rabin(n, [2]) else { false }
-  (try? strong_lucas_selfridge(n)).unwrap()
+  try! strong_lucas_selfridge(n)
 }
 
 ///|
