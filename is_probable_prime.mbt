@@ -224,7 +224,9 @@ test "BPSW: is probable prime" {
 }
 
 ///|
-let trial_division_primes : Array[Int] = [3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37]
+let trial_division_primes : Array[Int] = [
+  3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37,
+]
 
 ///|
 /// The function calls `is_small_prime` (n < 10000) or `is_probable_prime_bpsw` (otherwise)
