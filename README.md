@@ -1,8 +1,19 @@
-
 # Prime
 
-An efficient implementation of primality testing in MoonBit. 
+Efficient primality testing for MoonBit `BigInt`.
 
-- Function `is_prime` calls `is_small_prime` (n < 10,000) or `is_probable_prime_bpsw` (otherwise). 
-- Function `is_small_prime` has 𝒪(1) time complexity for small primes (≤ 10,000).
-- For larger numbers, function `is_probable_prime_bpsw` using the Baillie–Pomerance–Selfridge–Wagstaff (BPSW) test. 
+## Public API
+
+- `is_prime(n)`:
+  - Uses `is_small_prime` for `n < 10_000`.
+  - Uses `is_probable_prime_bpsw` for `n >= 10_000`.
+- `is_small_prime(n)`:
+  - Exact primality check for `Int` values in `[0, 10_000)`.
+- `is_probable_prime_bpsw(n)`:
+  - Baillie-Pomerance-Selfridge-Wagstaff (BPSW) probable-prime test.
+  - Fast in practice and has no known counterexample, but is still a probable-prime test.
+
+## Notes
+
+- The small-number path is optimized with a precomputed prime table and a narrow lookup window.
+- The large-number path combines Miller-Rabin (base 2) and strong Lucas-Selfridge.

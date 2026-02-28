@@ -1,5 +1,5 @@
 ///|
-pub fn is_even(n : BigInt) -> Bool {
+fn is_even(n : BigInt) -> Bool {
   (
   // Fixed in Jan 9, 2026: 
   //   `n & 1` panic for n is large even (≥ 2^32)
@@ -10,19 +10,19 @@ pub fn is_even(n : BigInt) -> Bool {
 }
 
 ///|
-pub fn is_odd(n : BigInt) -> Bool {
+fn is_odd(n : BigInt) -> Bool {
   (n & 1) == 1
 }
 
 ///|
-pub fn euclid_mod(a : BigInt, n : BigInt) -> BigInt {
+fn euclid_mod(a : BigInt, n : BigInt) -> BigInt {
   let r = a.mod(n)
   guard r < 0 else { r }
   r + n
 }
 
 ///|
-pub fn to_binary_bits(x : BigInt) -> Array[Int] {
+fn to_binary_bits(x : BigInt) -> Array[Int] {
   guard !x.is_zero() else { [0] }
   let mut x = x
   let bits : Array[Int] = []
@@ -48,7 +48,7 @@ test "BigInt to binary bits" {
 }
 
 ///|
-pub fn abs(x : BigInt) -> BigInt {
+fn abs(x : BigInt) -> BigInt {
   guard x < 0 else { x }
   -x
 }

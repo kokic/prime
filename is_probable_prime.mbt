@@ -1,6 +1,6 @@
 ///|
 /// Decompose $n$ to $(d, s)$ s.t. $n = d \cdot 2^s$ where $d$ is odd
-pub fn decompose_ds(n : BigInt) -> (BigInt, Int) {
+fn decompose_ds(n : BigInt) -> (BigInt, Int) {
   let mut d = n
   let mut s = 0
   while is_even(d) {
@@ -12,13 +12,13 @@ pub fn decompose_ds(n : BigInt) -> (BigInt, Int) {
 
 ///|
 /// Decompose $n-1$ to $(d, s)$ s.t. $n - 1 = d \cdot 2^s$ where $d$ is odd
-pub fn decompose_minus_one(n : BigInt) -> (BigInt, Int) {
+fn decompose_minus_one(n : BigInt) -> (BigInt, Int) {
   decompose_ds(n - 1)
 }
 
 ///|
 /// Decompose $n+1$ to $(d, s)$ s.t. $n + 1 = d \cdot 2^s$ where $d$ is odd
-pub fn decompose_plus_one(n : BigInt) -> (BigInt, Int) {
+fn decompose_plus_one(n : BigInt) -> (BigInt, Int) {
   decompose_ds(n + 1)
 }
 
@@ -32,7 +32,7 @@ test "decompose (d, s)" {
 }
 
 ///|
-pub fn miller_rabin_witness(a : BigInt, n : BigInt) -> Bool {
+fn miller_rabin_witness(a : BigInt, n : BigInt) -> Bool {
   guard !a.mod(n).is_zero() else { false }
 
   // a ≠ 0 (mod n)
@@ -56,7 +56,7 @@ pub fn miller_rabin_witness(a : BigInt, n : BigInt) -> Bool {
 }
 
 ///|
-pub fn miller_rabin(n : BigInt, bases : Array[Int]) -> Bool {
+fn miller_rabin(n : BigInt, bases : Array[Int]) -> Bool {
   guard n >= 2 else { false }
   guard !(n == 2 || n == 3) else { true }
   guard is_odd(n) else { false }
@@ -81,7 +81,7 @@ test "Miller Rabin" {
 
 ///|
 /// Also see: https://en.wikipedia.org/wiki/Jacobi_symbol#Primality_testing
-pub fn jacobi(a_base : BigInt, n_base : BigInt) -> Int raise {
+fn jacobi(a_base : BigInt, n_base : BigInt) -> Int raise {
   assert_true(n_base > 0 && is_odd(n_base), msg="n > 0 && n is odd: \{n_base}")
   let mut a = euclid_mod(a_base, n_base)
   let mut n = n_base
@@ -122,13 +122,13 @@ test "Jacobi symbol" {
 }
 
 ///|
-pub fn half_mod(x : BigInt, n : BigInt) -> BigInt {
+fn half_mod(x : BigInt, n : BigInt) -> BigInt {
   guard is_even(x) else { ((x + n) / 2).mod(n) }
   (x / 2).mod(n)
 }
 
 ///|
-pub fn lucas_uvqk(
+fn lucas_uvqk(
   p : BigInt,
   q : BigInt,
   d : BigInt,
@@ -138,6 +138,7 @@ pub fn lucas_uvqk(
   let mut v : BigInt = 2
   let mut qk : BigInt = 1
   let bits : Array[Int] = to_binary_bits(d)
+  let d_val = p * p - 4 * q
   for i = 0; i < bits.length(); i = i + 1 {
     let u2 = euclid_mod(u * v, n)
     let v2 = euclid_mod(v * v - qk * 2, n)
@@ -145,7 +146,6 @@ pub fn lucas_uvqk(
     v = v2
     qk = euclid_mod(qk * qk, n)
     if bits[i] == 1 {
-      let d_val = p * p - 4 * q
       let u_old = u
       let v_old = v
       u = half_mod(u_old + v_old, n)
@@ -157,7 +157,7 @@ pub fn lucas_uvqk(
 }
 
 ///|
-pub fn strong_lucas_selfridge(n : BigInt) -> Bool raise {
+fn strong_lucas_selfridge(n : BigInt) -> Bool raise {
   // step 1: pick `jacobi_d`
   let mut jacobi_d : BigInt = 5
   let mut sign = 1
@@ -202,6 +202,18 @@ pub fn strong_lucas_selfridge(n : BigInt) -> Bool raise {
 ///|
 /// Also see: @math.is_probable_prime
 pub fn is_probable_prime_bpsw(n : BigInt) -> Bool {
+  guard n >= 2 else { false }
+  guard !(n == 2 || n == 3) else { true }
+  guard is_odd(n) else { false }
+  for p in trial_division_primes {
+    let p_big = BigInt::from_int(p)
+    if n == p_big {
+      return true
+    }
+    if n.mod(p_big).is_zero() {
+      return false
+    }
+  }
   guard miller_rabin(n, [2]) else { false }
   try! strong_lucas_selfridge(n)
 }
@@ -212,8 +224,13 @@ test "BPSW: is probable prime" {
 }
 
 ///|
-/// The function calls `is_small_prime` (n < 1000) or `is_probable_prime_bpsw` (otherwise)
+let trial_division_primes : Array[Int] = [3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37]
+
+///|
+/// The function calls `is_small_prime` (n < 10000) or `is_probable_prime_bpsw` (otherwise)
 pub fn is_prime(n : BigInt) -> Bool {
-  guard n >= 1000 else { is_small_prime(n.to_int()) }
+  guard n >= 2 else { false }
+  let small_prime_limit = BigInt::from_int(SMALL_PRIME_LIMIT)
+  guard n >= small_prime_limit else { is_small_prime(n.to_int()) }
   is_probable_prime_bpsw(n)
 }
