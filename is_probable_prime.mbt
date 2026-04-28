@@ -200,6 +200,22 @@ fn strong_lucas_selfridge(n : BigInt) -> Bool raise {
 }
 
 ///|
+fn is_perfect_square(n : BigInt) -> Bool {
+  guard n >= 0 else { false }
+  guard n >= 2 else { true }
+  let r = n.mod(16)
+  guard r == 0 || r == 1 || r == 4 || r == 9 else { false }
+
+  let mut x = (1 : BigInt) << ((n.bit_length() + 1) / 2)
+  let mut y = (x + n / x) / 2
+  while y < x {
+    x = y
+    y = (x + n / x) / 2
+  }
+  x * x == n
+}
+
+///|
 /// Also see: @math.is_probable_prime
 pub fn is_probable_prime_bpsw(n : BigInt) -> Bool {
   guard n >= 2 else { false }
@@ -214,6 +230,7 @@ pub fn is_probable_prime_bpsw(n : BigInt) -> Bool {
       return false
     }
   }
+  guard !is_perfect_square(n) else { false }
   guard miller_rabin(n, [2]) else { false }
   try! strong_lucas_selfridge(n)
 }
@@ -221,6 +238,21 @@ pub fn is_probable_prime_bpsw(n : BigInt) -> Bool {
 ///|
 test "BPSW: is probable prime" {
   assert_true(is_probable_prime_bpsw(115792125365684818504981760053))
+}
+
+///|
+test "BPSW: rejects composites" {
+  assert_true(!is_probable_prime_bpsw(1000006000009))
+  assert_true(!is_probable_prime_bpsw(3215031751))
+  assert_true(!is_probable_prime_bpsw(3825123056546413051))
+}
+
+///|
+test "perfect square detection" {
+  let square = BigInt::from_string("1000006000009")
+  assert_true(is_perfect_square(square))
+  assert_true(!is_perfect_square(square - 1))
+  assert_true(!is_perfect_square(square + 1))
 }
 
 ///|
