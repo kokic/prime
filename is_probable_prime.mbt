@@ -137,21 +137,22 @@ fn lucas_uvqk(
   let mut u : BigInt = 0
   let mut v : BigInt = 2
   let mut qk : BigInt = 1
-  let bits : Array[Int] = to_binary_bits(d)
   let d_val = p * p - 4 * q
-  for i = 0; i < bits.length(); i = i + 1 {
+  let mut bit = d.bit_length() - 1
+  while bit >= 0 {
     let u2 = euclid_mod(u * v, n)
     let v2 = euclid_mod(v * v - qk * 2, n)
     u = u2
     v = v2
     qk = euclid_mod(qk * qk, n)
-    if bits[i] == 1 {
+    if !((d >> bit) & 1).is_zero() {
       let u_old = u
       let v_old = v
       u = half_mod(u_old + v_old, n)
       v = half_mod(v_old + d_val * u_old, n)
       qk = euclid_mod(qk * q, n)
     }
+    bit = bit - 1
   }
   (u, v, qk)
 }
