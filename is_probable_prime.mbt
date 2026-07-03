@@ -25,10 +25,10 @@ fn decompose_plus_one(n : BigInt) -> (BigInt, Int) {
 ///|
 test "decompose (d, s)" {
   // 57 - 1 = 7 × 2^3
-  assert_eq(decompose_minus_one(57), (7, 3))
+  @debug.assert_eq(decompose_minus_one(57), (7, 3))
 
   // 55 + 1 = 7 × 2^3
-  assert_eq(decompose_plus_one(55), (7, 3))
+  @debug.assert_eq(decompose_plus_one(55), (7, 3))
 }
 
 ///|
@@ -81,7 +81,7 @@ test "Miller Rabin" {
 
 ///|
 /// Also see: https://en.wikipedia.org/wiki/Jacobi_symbol#Primality_testing
-fn jacobi(a_base : BigInt, n_base : BigInt) -> Int raise {
+pub fn jacobi(a_base : BigInt, n_base : BigInt) -> Int raise {
   assert_true(n_base > 0 && is_odd(n_base), msg="n > 0 && n is odd: \{n_base}")
   let mut a = euclid_mod(a_base, n_base)
   let mut n = n_base
