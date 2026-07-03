@@ -263,6 +263,23 @@ let trial_division_primes : Array[Int] = [
 
 ///|
 /// The function calls `is_small_prime` (n < 10000) or `is_probable_prime_bpsw` (otherwise)
+/// 
+/// ```mbt check
+/// test "is_prime boundary regression" {
+///   assert_true(!is_prime(-1))
+///   assert_true(!is_prime(0))
+///   assert_true(!is_prime(1))
+///   assert_true(is_prime(2))
+///   assert_true(is_prime(3))
+///   assert_true(is_prime(5381))
+///   assert_true(is_prime(5387))
+///   assert_true(is_prime(9973))
+///   assert_true(!is_prime(9999))
+///   assert_true(!is_prime(10000))
+///   assert_true(!is_prime(10001))
+///   assert_true(is_prime(10007))
+/// }
+/// ```
 pub fn is_prime(n : BigInt) -> Bool {
   guard n >= 2 else { false }
   let small_prime_limit = BigInt::from_int(SMALL_PRIME_LIMIT)
