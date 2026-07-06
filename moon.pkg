@@ -2,3 +2,7 @@ import {
   "moonbitlang/core/math",
   "moonbitlang/core/debug",
 }
+
+options(
+  "proof-enabled": true,
+)
