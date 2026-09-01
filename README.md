@@ -1,3 +1,5 @@
+> The new repository for this project has been moved to https://github.com/kokic/algol/tree/main/prime.
+
 # Prime
 
 Efficient primality testing for MoonBit `BigInt`.
